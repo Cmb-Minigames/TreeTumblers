@@ -1,0 +1,14 @@
+name: TreeTumblers
+version: '1.0'
+main: xyz.devcmb.treeTumblers.TreeTumblers
+api-version: '1.21'
+prefix: Tree Tumblers
+load: STARTUP
+authors: [ DevCmb ]
+description: silly event server plugin (its open source guys)
+website: devcmb.xyz
+commands:
+  whitelist:
+    description: Gives a player server access and places them onto a team.
+    usage: /<command> <add|remove|list> <player> <team>
+    permission: treetumblers.organizer
