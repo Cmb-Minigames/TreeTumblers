@@ -67,7 +67,7 @@ public class WhitelistCommand implements CommandExecutor {
                 }
 
                 DataManager.TeamData teamData = DataManager.teamData.get(args[2].toLowerCase());
-                if (args[0].equals("add") && teamData == null) {
+                if (!args[2].equals("spectator") && teamData == null) {
                     commandSender.sendMessage(
                             Component.text("❓ ")
                                     .append(Component.text("Team not found.")
@@ -87,6 +87,10 @@ public class WhitelistCommand implements CommandExecutor {
                                             .color(NamedTextColor.RED))
                     );
                     return true;
+                }
+
+                if(id.equals("spectator")){
+                    id = null;
                 }
 
                 Boolean success = Database.setTeam(player, id);

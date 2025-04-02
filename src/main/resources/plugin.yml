@@ -5,6 +5,7 @@ api-version: '1.21'
 prefix: Tree Tumblers
 load: STARTUP
 authors: [ DevCmb ]
+depend: [ ProtocolLib ]
 description: silly event server plugin (its open source guys)
 website: devcmb.xyz
 commands:

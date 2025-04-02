@@ -120,3 +120,4 @@ runs/
 
 # Gradle task files
 versionCounter.txt
+bin

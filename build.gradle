@@ -4,6 +4,7 @@ import java.nio.file.StandardOpenOption
 
 plugins {
     id 'java'
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
 }
 
 group = 'xyz.devcmb'
@@ -19,10 +20,12 @@ repositories {
         name = "sonatype"
         url = "https://oss.sonatype.org/content/groups/public/"
     }
+    maven { url "https://repo.dmulloy2.net/repository/public/" }
 }
 
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.21.4-R0.1-SNAPSHOT")
+    compileOnly 'com.comphenix.protocol:ProtocolLib:5.3.0'
 }
 
 def targetJavaVersion = 21
@@ -87,6 +90,12 @@ static String padLeftZeros(String inputString, int length) {
     return sb.toString()
 }
 
+shadowJar {
+    archiveClassifier.set('')
+    mergeServiceFiles()
+}
+
 build {
     dependsOn 'updateVersion'
+    dependsOn shadowJar
 }

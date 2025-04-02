@@ -49,6 +49,12 @@ public class DataManager {
             this.player = player;
 
             Map<String, Object> playerData = Database.getPlayer(player);
+            if(playerData.isEmpty()){
+                this.points = 0;
+                this.team = "spectator";
+                return;
+            }
+
             this.points = (int) playerData.get("points");
             this.team = (String) playerData.get("team");
         }

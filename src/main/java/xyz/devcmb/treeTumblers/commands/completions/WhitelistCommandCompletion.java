@@ -26,7 +26,9 @@ package xyz.devcmb.treeTumblers.commands.completions;
                 }
             } else if (args.length == 3) {
                 if (args[0].equals("add")) {
-                    return new ArrayList<>(DataManager.teamData.keySet());
+                    List<String> teams = new ArrayList<>(DataManager.teamData.keySet());
+                    teams.add("spectator");
+                    return teams;
                 }
             }
 

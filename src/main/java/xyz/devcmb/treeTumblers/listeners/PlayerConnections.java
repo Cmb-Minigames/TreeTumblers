@@ -1,5 +1,6 @@
 package xyz.devcmb.treeTumblers.listeners;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -18,6 +19,11 @@ public class PlayerConnections implements Listener {
         PlayerUIDelegate delegate = UIManager.PlayerJoin(player);
         delegate.showActionBar("VersionDisplay", false);
         DataManager.RegisterPlayer(player);
+
+        Bukkit.getOnlinePlayers().forEach(plr -> {
+           player.unlistPlayer(plr);
+           plr.unlistPlayer(player);
+        });
     }
 
     @EventHandler
