@@ -29,4 +29,8 @@ public class Format {
 
         return formatted;
     }
+
+    public static String stringToUnicode(String string){
+        return Character.toString((char) Integer.parseInt(string.replace("\\u", ""), 16));
+    }
 }

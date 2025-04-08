@@ -10,6 +10,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
+import xyz.devcmb.treeTumblers.TreeTumblers;
 import xyz.devcmb.treeTumblers.data.DataManager;
 import xyz.devcmb.treeTumblers.util.Database;
 import xyz.devcmb.treeTumblers.util.Format;
@@ -96,6 +97,8 @@ public class WhitelistCommand implements CommandExecutor {
                 Boolean success = Database.setTeam(player, id);
                 if (success) {
                     player.setWhitelisted(true);
+                    DataManager.ReloadData();
+
                     commandSender.sendMessage(
                             Component.text("✅ ")
                                     .append(Component.text("Player ")
@@ -135,6 +138,7 @@ public class WhitelistCommand implements CommandExecutor {
                 Boolean success = Database.removePlayer(player);
                 if (success) {
                     player.setWhitelisted(false);
+                    DataManager.ReloadData();
                     commandSender.sendMessage(
                             Component.text("✅ ")
                                     .append(Component.text("Player ")
@@ -207,7 +211,7 @@ public class WhitelistCommand implements CommandExecutor {
                 return json.has("id");
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            TreeTumblers.LOGGER.info("Error checking player: " + e.getMessage());
         }
         return false;
     }

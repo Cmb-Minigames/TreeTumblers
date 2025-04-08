@@ -1,5 +1,6 @@
 package xyz.devcmb.treeTumblers.data;
 
+import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import xyz.devcmb.treeTumblers.util.Database;
@@ -38,6 +39,14 @@ public class DataManager {
         }
 
         return null;
+    }
+
+    public static void ReloadData(){
+        playerData.clear();
+        teamData.clear();
+
+        RegisterTeams();
+        Bukkit.getOnlinePlayers().forEach(DataManager::RegisterPlayer);
     }
 
     public static class PlayerData {
