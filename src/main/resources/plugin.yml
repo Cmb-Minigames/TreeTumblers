@@ -3,9 +3,8 @@ version: '1.0'
 main: xyz.devcmb.treeTumblers.TreeTumblers
 api-version: '1.21'
 prefix: Tree Tumblers
-load: STARTUP
 authors: [ DevCmb ]
-depend: [ ProtocolLib ]
+depend: [ packetevents ]
 description: silly event server plugin (its open source guys)
 website: devcmb.xyz
 commands:

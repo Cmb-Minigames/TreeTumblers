@@ -33,13 +33,13 @@ public class PlayerConnections implements Listener {
         Database.newPlayer(player);
         PlayerUIDelegate delegate = UIManager.PlayerJoin(player);
         delegate.showActionBar("VersionDisplay", false);
+        delegate.showSidebar("TeamScores", false);
         DataManager.RegisterPlayer(player);
 
         Bukkit.getOnlinePlayers().forEach(plr -> {
            player.unlistPlayer(plr);
            plr.unlistPlayer(player);
         });
-
 
         BukkitTask task = Bukkit.getScheduler().runTaskTimer(TreeTumblers.getPlugin(), () -> {
             Component[] components = {

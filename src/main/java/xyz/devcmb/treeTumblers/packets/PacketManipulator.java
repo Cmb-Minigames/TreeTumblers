@@ -1,6 +1,7 @@
 package xyz.devcmb.treeTumblers.packets;
 
-public interface PacketManipulator {
-    void RegisterPacketListener();
+import com.github.retrooper.packetevents.event.PacketListener;
+
+public interface PacketManipulator extends PacketListener {
     Boolean IsDefault();
 }
