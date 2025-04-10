@@ -31,27 +31,21 @@ public class WhitelistCommand implements CommandExecutor {
     public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String @NotNull [] args) {
         if(args.length == 0){
             commandSender.sendMessage(
-                    Component.text("❓ ")
-                        .append(Component.text("Usage: /whitelist <add | remove | list> <player> <team>")
-                        .color(NamedTextColor.RED))
+                    Format.error("Usage: /whitelist <add | remove | list> <player> <team>")
             );
             return true;
         }
 
         if(!WhitelistOptions.contains(args[0].toLowerCase())){
             commandSender.sendMessage(
-                    Component.text("❓ ")
-                        .append(Component.text("Invalid option. Use add, remove, or list.")
-                        .color(NamedTextColor.RED))
+                    Format.error("Invalid option. Use add, remove, or list.")
             );
             return true;
         }
 
         if(args.length >= 2 && !isValidMinecraftPlayer(args[1])){
             commandSender.sendMessage(
-                    Component.text("❓ ")
-                       .append(Component.text("Player not found.")
-                        .color(NamedTextColor.RED))
+                    Format.error("Player not found.")
             );
             return true;
         }
@@ -60,9 +54,7 @@ public class WhitelistCommand implements CommandExecutor {
             case "add" -> {
                 if (args.length != 3) {
                     commandSender.sendMessage(
-                            Component.text("❓ ")
-                                    .append(Component.text("Usage: /whitelist add <player> <team>")
-                                            .color(NamedTextColor.RED))
+                            Format.error("Usage: /whitelist add <player> <team>")
                     );
                     return true;
                 }
@@ -70,9 +62,7 @@ public class WhitelistCommand implements CommandExecutor {
                 DataManager.TeamData teamData = DataManager.teamData.get(args[2].toLowerCase());
                 if (!args[2].equals("spectator") && teamData == null) {
                     commandSender.sendMessage(
-                            Component.text("❓ ")
-                                    .append(Component.text("Team not found.")
-                                            .color(NamedTextColor.RED))
+                            Format.error("Team not found.")
                     );
                     return true;
                 }
@@ -83,9 +73,7 @@ public class WhitelistCommand implements CommandExecutor {
 
                 if (player.isWhitelisted()) {
                     commandSender.sendMessage(
-                            Component.text("❌ ")
-                                    .append(Component.text("Player is already whitelisted.")
-                                            .color(NamedTextColor.RED))
+                            Format.error("Team not found.")
                     );
                     return true;
                 }
@@ -100,26 +88,21 @@ public class WhitelistCommand implements CommandExecutor {
                     DataManager.ReloadData();
 
                     commandSender.sendMessage(
-                            Component.text("✅ ")
-                                    .append(Component.text("Player ")
+                            Format.success(Component.text("Player ")
                                             .color(NamedTextColor.GREEN))
                                     .append(Format.formatPlayerName(player))
                                     .append(Component.text(" has been added to the whitelist.").color(NamedTextColor.GREEN))
                     );
                 } else {
                     commandSender.sendMessage(
-                            Component.text("❌ ")
-                                    .append(Component.text("Failed to add player to the team.")
-                                            .color(NamedTextColor.RED))
+                            Format.error("Failed to add player to the team.")
                     );
                 }
             }
             case "remove" -> {
                 if (args.length != 2) {
                     commandSender.sendMessage(
-                            Component.text("❓ ")
-                                    .append(Component.text("Usage: /whitelist remove <player>")
-                                            .color(NamedTextColor.RED))
+                            Format.error("Usage: /whitelist remove <player>")
                     );
                     return true;
                 }
@@ -128,9 +111,7 @@ public class WhitelistCommand implements CommandExecutor {
                 OfflinePlayer player = Bukkit.getOfflinePlayer(playerName);
                 if (!player.isWhitelisted()) {
                     commandSender.sendMessage(
-                            Component.text("❌ ")
-                                    .append(Component.text("Player is not whitelisted.")
-                                            .color(NamedTextColor.RED))
+                            Format.error("Player is not whitelisted.")
                     );
                     return true;
                 }
@@ -140,19 +121,14 @@ public class WhitelistCommand implements CommandExecutor {
                     player.setWhitelisted(false);
                     DataManager.ReloadData();
                     commandSender.sendMessage(
-                            Component.text("✅ ")
-                                    .append(Component.text("Player ")
+                            Format.success(Component.text("Player ")
                                             .color(NamedTextColor.GREEN))
-                                    .append(Component.text(playerName)
-                                            .color(NamedTextColor.GRAY))
-                                    .append(Component.text(" has been removed from the whitelist.")
-                                            .color(NamedTextColor.GREEN))
+                                    .append(Format.formatPlayerName(player))
+                                    .append(Component.text(" has been removed from the whitelist.").color(NamedTextColor.GREEN))
                     );
                 } else {
                     commandSender.sendMessage(
-                            Component.text("❌ ")
-                                    .append(Component.text("Failed to remove player from the whitelist.")
-                                            .color(NamedTextColor.RED))
+                            Format.error("Failed to remove player from the whitelist.")
                     );
                 }
             }
@@ -160,9 +136,7 @@ public class WhitelistCommand implements CommandExecutor {
                 List<OfflinePlayer> whitelistedPlayers = Bukkit.getWhitelistedPlayers().stream().toList();
                 if (whitelistedPlayers.isEmpty()) {
                     commandSender.sendMessage(
-                            Component.text("❌ ")
-                                    .append(Component.text("No players are currently whitelisted.")
-                                            .color(NamedTextColor.RED))
+                            Format.error("No players are currently whitelisted.")
                     );
                 } else {
                     final Component[] component = {Component.text("✅ ")
@@ -184,9 +158,7 @@ public class WhitelistCommand implements CommandExecutor {
             }
             default -> {
                 commandSender.sendMessage(
-                        Component.text("❓ ")
-                                .append(Component.text("Invalid option. Use add, remove, or list.")
-                                        .color(NamedTextColor.RED))
+                        Format.error("Invalid option. Use add, remove, or list.")
                 );
                 return true;
             }

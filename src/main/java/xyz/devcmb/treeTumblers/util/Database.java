@@ -5,6 +5,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import xyz.devcmb.treeTumblers.TreeTumblers;
+import xyz.devcmb.treeTumblers.data.DataManager;
 
 import java.sql.*;
 import java.util.*;
@@ -215,5 +216,41 @@ public class Database {
 
         TreeTumblers.LOGGER.info(players.toString());
         return players;
+    }
+
+    public static void updateTeam(DataManager.TeamData data){
+        if (connection == null) {
+            TreeTumblers.LOGGER.severe("Database connection is not established.");
+            return;
+        }
+
+        try {
+            String query = "UPDATE Teams SET points = ? WHERE id = ?";
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setInt(1, data.getPoints());
+            statement.executeUpdate();
+            statement.close();
+        } catch (SQLException e) {
+            TreeTumblers.LOGGER.severe("Failed to update team data: " + e.getMessage());
+        }
+    }
+
+    public static void updatePlayer(DataManager.PlayerData data){
+        if (connection == null) {
+            TreeTumblers.LOGGER.severe("Database connection is not established.");
+            return;
+        }
+
+        try {
+            String query = "UPDATE Players SET points = ?, team = ? WHERE uuid = ?";
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setInt(1, data.getPoints());
+            statement.setString(2, data.getTeam());
+            statement.setString(3, data.getPlayer().getUniqueId().toString());
+            statement.executeUpdate();
+            statement.close();
+        } catch (SQLException e) {
+            TreeTumblers.LOGGER.severe("Failed to update player data: " + e.getMessage());
+        }
     }
 }

@@ -42,6 +42,8 @@ public class DataManager {
     }
 
     public static void ReloadData(){
+        SaveData();
+
         playerData.clear();
         teamData.clear();
 
@@ -49,10 +51,33 @@ public class DataManager {
         Bukkit.getOnlinePlayers().forEach(DataManager::RegisterPlayer);
     }
 
+    public static void SaveData(){
+        teamData.forEach((id, data) -> Database.updateTeam(data));
+        playerData.forEach((player, data) -> Database.updatePlayer(data));
+    }
+
+    public static void setPlayerTeam(OfflinePlayer player, String teamId){
+        TeamData teamData = GetPlayerTeam(player);
+        if(teamData != null){
+            teamData.removePlayer(player);
+        }
+
+        if(player.isOnline()){
+            Player onlinePlayer = player.getPlayer();
+            if(onlinePlayer != null){
+                PlayerData data = playerData.get(onlinePlayer);
+                data.setTeam(teamId);
+            }
+        } else {
+            Database.setTeam(player, teamId);
+            ReloadData();
+        }
+    }
+
     public static class PlayerData {
         private final Player player;
         private final int points;
-        private final String team;
+        private String team;
 
         public PlayerData(Player player){
             this.player = player;
@@ -78,6 +103,10 @@ public class DataManager {
 
         public String getTeam() {
             return team;
+        }
+
+        public void setTeam(String id){
+            this.team = id;
         }
     }
 
@@ -120,6 +149,14 @@ public class DataManager {
 
         public List<OfflinePlayer> getPlayers() {
             return players;
+        }
+
+        public void removePlayer(OfflinePlayer player){
+            players.remove(player);
+        }
+
+        public void addPlayer(OfflinePlayer player){
+            players.add(player);
         }
     }
 

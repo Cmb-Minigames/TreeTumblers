@@ -30,6 +30,28 @@ public class Format {
         return formatted;
     }
 
+    public static Component success(String message){
+        return Component.text("✅ ")
+                .append(Component.text(message)
+                .color(NamedTextColor.GREEN));
+    }
+
+    public static Component success(Component message){
+        return Component.text("✅ ")
+                .append(message);
+    }
+
+    public static Component error(String message){
+        return Component.text("❓ ")
+                .append(Component.text(message)
+                .color(NamedTextColor.RED));
+    }
+
+    public static Component error(Component message){
+        return Component.text("❓ ")
+                .append(message);
+    }
+
     public static String stringToUnicode(String string){
         return Character.toString((char) Integer.parseInt(string.replace("\\u", ""), 16));
     }

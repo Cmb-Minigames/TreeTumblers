@@ -53,6 +53,7 @@ public final class TreeTumblers extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        DataManager.SaveData();
         Database.disconnect();
         PacketEvents.getAPI().terminate();
     }

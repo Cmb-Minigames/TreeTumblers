@@ -12,3 +12,7 @@ commands:
     description: Gives a player server access and places them onto a team.
     usage: /<command> <add|remove|list> <player> <team>
     permission: treetumblers.organizer
+  team:
+    description: Sets the team of a player
+    usage: /<command> <player> <team>
+    permission: treetumblers.organizer
