@@ -1,4 +1,4 @@
-name: Tree Tumblers
+name: TreeTumblers
 version: '0.1'
 main: xyz.devcmb.treeTumblers.TreeTumblers
 api-version: '1.21'
