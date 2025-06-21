@@ -6,3 +6,8 @@ prefix: Tree Tumblers
 authors: [ DevCmb ]
 description: The server. It lives.
 website: devcmb.xyz
+commands:
+  whitelist:
+    description: Gives a player server access and places them onto a team.
+    usage: /<command> <add|remove|list> <player> <team>
+    permission: treetumblers.organizer

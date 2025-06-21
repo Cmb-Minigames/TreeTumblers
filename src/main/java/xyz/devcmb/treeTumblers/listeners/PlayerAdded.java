@@ -5,6 +5,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import xyz.devcmb.treeTumblers.Constants;
+import xyz.devcmb.treeTumblers.data.DataManager;
 import xyz.devcmb.treeTumblers.ui.PlayerUIController;
 import xyz.devcmb.treeTumblers.ui.UIManager;
 
@@ -17,5 +18,7 @@ public class PlayerAdded implements Listener {
         if(Constants.DEV_MODE) {
             controller.setActionBar("version");
         }
+
+        DataManager.playerJoin(player);
     }
 }

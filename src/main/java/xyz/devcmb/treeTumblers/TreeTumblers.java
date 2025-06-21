@@ -1,7 +1,9 @@
 package xyz.devcmb.treeTumblers;
 
 import org.bukkit.plugin.java.JavaPlugin;
+import xyz.devcmb.treeTumblers.data.DataManager;
 import xyz.devcmb.treeTumblers.listeners.ListenerManager;
+import xyz.devcmb.treeTumblers.util.Database;
 
 import java.util.logging.Logger;
 
@@ -18,10 +20,15 @@ public final class TreeTumblers extends JavaPlugin {
         LOGGER = getLogger();
         plugin = this;
 
+        saveDefaultConfig();
+
+        Database.connect();
+        DataManager.registerAllTeams();
         ListenerManager.registerAllListeners();
     }
 
     @Override
     public void onDisable() {
+        Database.disconnect();
     }
 }
