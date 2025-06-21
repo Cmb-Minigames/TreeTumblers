@@ -37,13 +37,16 @@ public class DataManager {
                 return;
             }
 
+
             try {
+                data.next();
+
                 this.team = data.getString("team");
                 if(this.team == null) this.team = "spectator";
 
                 this.points = data.getInt("points");
             } catch(Exception err) {
-                TreeTumblers.LOGGER.severe(err.getMessage());
+                TreeTumblers.LOGGER.severe("Failed to load user data for player " + player.getName() + ": " + err.getMessage());
             }
         }
     }
@@ -65,12 +68,14 @@ public class DataManager {
             }
 
             try {
+                data.next();
+
                 this.name = data.getString("name");
                 this.icon = data.getString("icon");
                 this.points = data.getInt("points");
                 this.teamMembers = Database.getTeamMembers(id);
             } catch(Exception err) {
-                TreeTumblers.LOGGER.severe(err.getMessage());
+                TreeTumblers.LOGGER.severe("Failed to load team data for " + id + ": " + err.getMessage());
             }
         }
     }
