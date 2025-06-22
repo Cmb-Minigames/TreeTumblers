@@ -3,11 +3,13 @@ package xyz.devcmb.treeTumblers.commands;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.TabCompleter;
 import xyz.devcmb.treeTumblers.TreeTumblers;
+import xyz.devcmb.treeTumblers.commands.admin.ReloadCommand;
 
 import java.util.Objects;
 
 public class RegisterCommands {
     public static void Register(){
+        registerSingleCommand("reload", new ReloadCommand());
     }
 
     /**

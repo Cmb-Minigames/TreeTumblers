@@ -1,5 +1,6 @@
 package xyz.devcmb.treeTumblers.data;
 
+import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import xyz.devcmb.treeTumblers.TreeTumblers;
@@ -20,6 +21,13 @@ public class DataManager {
     public static void registerAllTeams() {
         Map<String, Map<String, Object>> teams = Database.getAllTeams();
         teams.forEach((id, data) -> teamData.put(id, new TeamData(id)));
+    }
+    public static void reload() {
+        playerData.clear();
+        teamData.clear();
+
+        registerAllTeams();
+        Bukkit.getOnlinePlayers().forEach(player -> playerData.put(player, new PlayerData(player)));
     }
 
     public static class PlayerData {

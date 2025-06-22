@@ -47,7 +47,7 @@ public class PlayerAdded implements Listener {
                     Component.newline()
                             .appendNewline()
                             .append(
-                                    Component.text("   \uE000   ")
+                                    Component.text("   \u0001   ")
                                             .font(Key.key("tumbling:icons"))
                             ).appendNewline().appendNewline().appendNewline().appendNewline()
             };
@@ -69,8 +69,8 @@ public class PlayerAdded implements Listener {
                         playerComponents
                 );
 
-                components[0] = components[0].append(Component.newline().append(Component.text("    ")).append(
-                        Component.text(Format.stringToUnicode(data.icon) + " ")
+                components[0] = components[0].append(Component.newline().append(Component.newline()).append(Component.text("    ")).append(
+                        Component.empty().append(Component.text(Format.stringToUnicode(data.icon) + " ").font(Key.key("tumbling:icons")))
                                 .append(joinedComponents)).append(Component.text("    "))
                 );
             });
