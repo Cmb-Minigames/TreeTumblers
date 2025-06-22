@@ -37,7 +37,6 @@ public class DataManager {
                 return;
             }
 
-
             try {
                 data.next();
 
@@ -55,6 +54,7 @@ public class DataManager {
         public String id;
         public String name;
         public String icon;
+        public String color;
         public int points;
         public List<OfflinePlayer> teamMembers;
 
@@ -73,6 +73,7 @@ public class DataManager {
                 this.name = data.getString("name");
                 this.icon = data.getString("icon");
                 this.points = data.getInt("points");
+                this.color = data.getString("color");
                 this.teamMembers = Database.getTeamMembers(id);
             } catch(Exception err) {
                 TreeTumblers.LOGGER.severe("Failed to load team data for " + id + ": " + err.getMessage());

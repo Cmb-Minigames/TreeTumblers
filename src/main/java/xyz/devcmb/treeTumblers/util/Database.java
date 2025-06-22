@@ -7,10 +7,7 @@ import org.bukkit.entity.Player;
 import xyz.devcmb.treeTumblers.TreeTumblers;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Database {
     private static Connection connection;
@@ -153,7 +150,8 @@ public class Database {
             preparedStatement.setString(1, team);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-                OfflinePlayer player = Bukkit.getOfflinePlayer(resultSet.getString("uuid"));
+                TreeTumblers.LOGGER.info("Adding player with UUID " + resultSet.getString("uuid"));
+                OfflinePlayer player = Bukkit.getOfflinePlayer(UUID.fromString(resultSet.getString("uuid")));
                 players.add(player);
             }
         } catch(Exception e) {
