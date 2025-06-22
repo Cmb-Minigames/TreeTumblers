@@ -15,8 +15,8 @@ import xyz.devcmb.treeTumblers.TreeTumblers;
 import xyz.devcmb.treeTumblers.data.DataManager;
 import xyz.devcmb.treeTumblers.ui.PlayerUIController;
 import xyz.devcmb.treeTumblers.ui.UIManager;
+import xyz.devcmb.treeTumblers.util.Database;
 import xyz.devcmb.treeTumblers.util.Format;
-import xyz.devcmb.treeTumblers.util.Utilities;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -56,10 +56,10 @@ public class PlayerAdded implements Listener {
                 List<Component> playerComponents = new ArrayList<>();
 
                 data.teamMembers.forEach(plr -> {
-                    String name = Utilities.GetOfflinePlayerName(plr);
+                    String name = plr.getName();
                     playerComponents.add(
                             Component.text(
-                                    (name == null ? "Unknown" : name)
+                                    (name == null ? Database.GetDatabasePlayerName(plr.getUniqueId().toString()) : name)
                             ).color(TextColor.fromHexString(data.color))
                     );
                 });

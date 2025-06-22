@@ -11,3 +11,5 @@ commands:
     usage: /<command>
     permission: treetumblers.admin
     description: Reload all data sources to their database values
+  whitelist:
+    usage: /<command> <add|remove|list> <player> <team>

@@ -30,6 +30,31 @@ public class DataManager {
         Bukkit.getOnlinePlayers().forEach(player -> playerData.put(player, new PlayerData(player)));
     }
 
+    public static TeamData GetPlayerTeam(OfflinePlayer player) {
+        for (Map.Entry<String, TeamData> entry : teamData.entrySet()) {
+            TeamData data = entry.getValue();
+            List<OfflinePlayer> players = data.teamMembers;
+            for (OfflinePlayer plr : players) {
+                if (plr.equals(player)) {
+                    return data;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    public static void PlayerWhitelist(OfflinePlayer player, String team) {
+        TeamData data = teamData.get(team);
+        if (data == null) return;
+
+        data.teamMembers.add(player);
+    }
+
+    public static void PlayerRemoveWhitelist(OfflinePlayer player) {
+        teamData.forEach((id, team) -> team.teamMembers.remove(player));
+    }
+
     public static class PlayerData {
         public Player player;
         public String team;

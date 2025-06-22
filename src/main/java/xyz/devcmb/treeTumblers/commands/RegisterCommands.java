@@ -4,12 +4,19 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.TabCompleter;
 import xyz.devcmb.treeTumblers.TreeTumblers;
 import xyz.devcmb.treeTumblers.commands.admin.ReloadCommand;
+import xyz.devcmb.treeTumblers.commands.admin.WhitelistCommand;
+import xyz.devcmb.treeTumblers.commands.completions.WhitelistCommandCompletion;
 
 import java.util.Objects;
 
 public class RegisterCommands {
     public static void Register(){
+        // Commands
         registerSingleCommand("reload", new ReloadCommand());
+        registerSingleCommand("whitelist", new WhitelistCommand());
+
+        // Completions
+        registerSingleTabCompletion("whitelist", new WhitelistCommandCompletion());
     }
 
     /**

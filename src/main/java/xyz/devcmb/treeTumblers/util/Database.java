@@ -160,4 +160,78 @@ public class Database {
 
         return players;
     }
+
+    public static Boolean setTeam(OfflinePlayer player, String id, String playerName) {
+        if (connection == null) {
+            TreeTumblers.LOGGER.severe("Database connection is not established.");
+            return false;
+        }
+
+        try {
+            String query = "INSERT INTO Players (uuid, name, team, points) VALUES (?, ?, ?, ?) " +
+                    "ON DUPLICATE KEY UPDATE team = VALUES(team), points = VALUES(points)";
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setString(1, player.getUniqueId().toString());
+            statement.setString(2, playerName);
+            statement.setString(3, id);
+            statement.setInt(4, 0);
+            statement.executeUpdate();
+            statement.close();
+            return true;
+        } catch (SQLException e) {
+            TreeTumblers.LOGGER.severe("Failed to set team for player: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public static Boolean removePlayer(OfflinePlayer player) {
+        if (connection == null) {
+            TreeTumblers.LOGGER.severe("Database connection is not established.");
+            return false;
+        }
+
+        try {
+            String query = "UPDATE Players SET team = NULL, points = 0 WHERE uuid = ?";
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setString(1, player.getUniqueId().toString());
+            int rowsAffected = statement.executeUpdate();
+            if (rowsAffected == 0) {
+                TreeTumblers.LOGGER.warning("Player with UUID " + player.getUniqueId() + " not found in the database.");
+            }
+            statement.close();
+            return true;
+        } catch (SQLException e) {
+            TreeTumblers.LOGGER.severe("Failed to remove player from the database: " + e.getMessage());
+            return false;
+        }
+    }
+
+    private static final Map<String, String> usernameCache = new HashMap<>();
+    public static String GetDatabasePlayerName(String UUID) {
+        if (connection == null) {
+            TreeTumblers.LOGGER.severe("Database connection is not established.");
+            return "Unknown";
+        }
+
+        if(usernameCache.get(UUID) != null) {
+            return usernameCache.get(UUID);
+        }
+
+        try {
+            String query = "SELECT name FROM Players WHERE uuid = ?";
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setString(1, UUID);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                String result = resultSet.getString("name");
+                usernameCache.put(UUID, result);
+                return result;
+            } else {
+                return "Unknown";
+            }
+        } catch(Exception e) {
+            TreeTumblers.LOGGER.severe("Failed to get player name: " + e.getMessage());
+            return "Unknown";
+        }
+    }
 }
