@@ -3,6 +3,7 @@ package xyz.devcmb.treeTumblers.listeners;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.JoinConfiguration;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -52,7 +53,26 @@ public class PlayerAdded implements Listener {
                             ).appendNewline().appendNewline().appendNewline().appendNewline()
             };
 
-            DataManager.teamData.forEach((id, data) -> {
+            // Thank you copilot
+            // This scares me :D
+            Map<String, DataManager.TeamData> sortedTeamData = DataManager.teamData.entrySet().stream()
+                    .sorted((e1, e2) -> {
+                        int cmp = Integer.compare(e2.getValue().points, e1.getValue().points);
+                        if (cmp == 0) {
+                            return Integer.compare(e1.getValue().order, e2.getValue().order);
+                        }
+                        return cmp;
+                    })
+                    .collect(
+                            java.util.stream.Collectors.toMap(
+                                    Map.Entry::getKey,
+                                    Map.Entry::getValue,
+                                    (e1, e2) -> e1,
+                                    java.util.LinkedHashMap::new
+                            )
+                    );
+
+            sortedTeamData.forEach((id, data) -> {
                 List<Component> playerComponents = new ArrayList<>();
 
                 data.teamMembers.forEach(plr -> {
@@ -60,12 +80,12 @@ public class PlayerAdded implements Listener {
                     playerComponents.add(
                             Component.text(
                                     (name == null ? Database.GetDatabasePlayerName(plr.getUniqueId().toString()) : name)
-                            ).color(TextColor.fromHexString(data.color))
+                            ).color(plr.isOnline() ? TextColor.fromHexString(data.color) : NamedTextColor.DARK_GRAY)
                     );
                 });
 
                 Component joinedComponents = Component.join(
-                        JoinConfiguration.builder().separator(Component.text(" • ")).build(),
+                        JoinConfiguration.builder().separator(Component.text(" • ").color(NamedTextColor.WHITE)).build(),
                         playerComponents
                 );
 

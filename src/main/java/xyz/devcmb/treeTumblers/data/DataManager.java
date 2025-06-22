@@ -18,10 +18,12 @@ public class DataManager {
     public static void playerJoin(Player player) {
         playerData.put(player, new PlayerData(player));
     }
+
     public static void registerAllTeams() {
         Map<String, Map<String, Object>> teams = Database.getAllTeams();
         teams.forEach((id, data) -> teamData.put(id, new TeamData(id)));
     }
+
     public static void reload() {
         playerData.clear();
         teamData.clear();
@@ -90,6 +92,7 @@ public class DataManager {
         public String color;
         public int points;
         public List<OfflinePlayer> teamMembers;
+        public int order;
 
         public TeamData(String id) {
             this.id = id;
@@ -107,6 +110,8 @@ public class DataManager {
                 this.icon = data.getString("icon");
                 this.points = data.getInt("points");
                 this.color = data.getString("color");
+                this.order = data.getInt("order");
+
                 this.teamMembers = Database.getTeamMembers(id);
             } catch(Exception err) {
                 TreeTumblers.LOGGER.severe("Failed to load team data for " + id + ": " + err.getMessage());
