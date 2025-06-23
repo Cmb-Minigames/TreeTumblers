@@ -19,10 +19,7 @@ import xyz.devcmb.treeTumblers.ui.UIManager;
 import xyz.devcmb.treeTumblers.util.Database;
 import xyz.devcmb.treeTumblers.util.Format;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class PlayerAdded implements Listener {
     Map<Player, BukkitTask> headerTasks = new HashMap<>();
@@ -31,6 +28,7 @@ public class PlayerAdded implements Listener {
     public void playerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
         PlayerUIController controller = UIManager.playerAdded(player);
+        controller.setScoreboard("teamscores");
 
         if(Constants.DEV_MODE) {
             controller.setActionBar("version");
@@ -56,18 +54,12 @@ public class PlayerAdded implements Listener {
             // Thank you copilot
             // This scares me :D
             Map<String, DataManager.TeamData> sortedTeamData = DataManager.teamData.entrySet().stream()
-                    .sorted((e1, e2) -> {
-                        int cmp = Integer.compare(e2.getValue().points, e1.getValue().points);
-                        if (cmp == 0) {
-                            return Integer.compare(e1.getValue().order, e2.getValue().order);
-                        }
-                        return cmp;
-                    })
+                    .sorted(Comparator.comparingInt(e -> e.getValue().order))
                     .collect(
                             java.util.stream.Collectors.toMap(
                                     Map.Entry::getKey,
                                     Map.Entry::getValue,
-                                    (e1, e2) -> e1,
+                                    (e3, e4) -> e3,
                                     java.util.LinkedHashMap::new
                             )
                     );

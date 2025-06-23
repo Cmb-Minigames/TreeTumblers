@@ -9,8 +9,6 @@ public class UIManager {
 
     public static PlayerUIController playerAdded(Player player) {
         PlayerUIController playerUIController = new PlayerUIController(player);
-        playerUIController.registerAllActionBars();
-
         playerUIControllers.put(player, playerUIController);
         return playerUIController;
     }
