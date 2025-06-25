@@ -14,7 +14,6 @@ import java.util.logging.Logger;
 public final class TreeTumblers extends JavaPlugin {
     public static Logger LOGGER;
     private static TreeTumblers plugin;
-    private PacketManager packetManager;
 
     public static TreeTumblers getPlugin() {
         return plugin;
@@ -45,9 +44,5 @@ public final class TreeTumblers extends JavaPlugin {
     public void onDisable() {
         PacketEvents.getAPI().terminate();
         Database.disconnect();
-    }
-
-    public PacketManager getPacketManager() {
-        return packetManager;
     }
 }

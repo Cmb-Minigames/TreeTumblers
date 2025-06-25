@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.scheduler.BukkitTask;
 import xyz.devcmb.treeTumblers.Constants;
 import xyz.devcmb.treeTumblers.TreeTumblers;
@@ -21,11 +22,19 @@ import xyz.devcmb.treeTumblers.util.Format;
 
 import java.util.*;
 
-public class PlayerAdded implements Listener {
+public class PlayerConnections implements Listener {
     Map<Player, BukkitTask> headerTasks = new HashMap<>();
 
     @EventHandler
     public void playerJoin(PlayerJoinEvent event) {
+        event.joinMessage(Component.empty().append(
+                Component.empty()
+                        .append(Component.text("[").color(NamedTextColor.DARK_GRAY))
+                        .append(Component.text("+").color(NamedTextColor.GREEN))
+                        .append(Component.text("] ").color(NamedTextColor.DARK_GRAY))
+                        .append(Format.formatPlayerName(event.getPlayer()))
+        ));
+
         Player player = event.getPlayer();
         PlayerUIController controller = UIManager.playerAdded(player);
         controller.setScoreboard("teamscores");
@@ -93,5 +102,16 @@ public class PlayerAdded implements Listener {
         }, 0, 10);
 
         headerTasks.put(player, task);
+    }
+
+    @EventHandler
+    public void playerLeave(PlayerQuitEvent event) {
+        event.quitMessage(Component.empty().append(
+                Component.empty()
+                        .append(Component.text("[").color(NamedTextColor.DARK_GRAY))
+                        .append(Component.text("-").color(NamedTextColor.RED))
+                        .append(Component.text("] ").color(NamedTextColor.DARK_GRAY))
+                        .append(Format.formatPlayerName(event.getPlayer()))
+        ));
     }
 }
