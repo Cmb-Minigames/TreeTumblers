@@ -3,6 +3,7 @@ package xyz.devcmb.treeTumblers.commands;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.TabCompleter;
 import xyz.devcmb.treeTumblers.TreeTumblers;
+import xyz.devcmb.treeTumblers.commands.admin.ReadyCheckCommand;
 import xyz.devcmb.treeTumblers.commands.admin.ReloadCommand;
 import xyz.devcmb.treeTumblers.commands.admin.WhitelistCommand;
 import xyz.devcmb.treeTumblers.commands.completions.WhitelistCommandCompletion;
@@ -14,6 +15,7 @@ public class RegisterCommands {
         // Commands
         registerSingleCommand("reload", new ReloadCommand());
         registerSingleCommand("whitelist", new WhitelistCommand());
+        registerSingleCommand("readycheck", new ReadyCheckCommand());
 
         // Completions
         registerSingleTabCompletion("whitelist", new WhitelistCommandCompletion());

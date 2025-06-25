@@ -8,6 +8,7 @@ import xyz.devcmb.treeTumblers.TreeTumblers;
 public class ListenerManager {
     public static void registerAllListeners(){
         registerListener(new PlayerConnections());
+        registerListener(new ReadyCheckListener());
     }
 
     public static void registerListener(Listener listener){

@@ -13,3 +13,9 @@ commands:
     description: Reload all data sources to their database values
   whitelist:
     usage: /<command> <add|remove|list> <player> <team>
+    permission: treetumblers.admin
+    description: Whitelist a player
+  readycheck:
+    usage: /<command>
+    permission: treetumblers.admin
+    description: Displays the ready check dialogue

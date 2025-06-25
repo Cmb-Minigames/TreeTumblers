@@ -9,8 +9,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.*;
 import xyz.devcmb.treeTumblers.TreeTumblers;
 import xyz.devcmb.treeTumblers.data.DataManager;
-import xyz.devcmb.treeTumblers.timers.Timer;
-import xyz.devcmb.treeTumblers.timers.TimerManager;
 import xyz.devcmb.treeTumblers.util.Format;
 
 import java.util.LinkedHashMap;
@@ -45,15 +43,16 @@ public class TeamScoreboard implements IScoreboard {
         Score blank1 = objective.getScore(" ");
         blank1.setScore(12);
 
-        Timer activeTimer = TimerManager.activeTimer;
-        if (activeTimer != null) {
-            Score timer = objective.getScore("timer");
-            timer.customName(Component.text("⏱️ ").append(Component.text(activeTimer.getTime()).color(NamedTextColor.YELLOW)));
-            timer.setScore(11);
-
-            Score blank2 = objective.getScore("   ");
-            blank2.setScore(10);
-        }
+        // TODO: Implement a better timer system
+//        Timer activeTimer = TimerManager.activeTimer;
+//        if (activeTimer != null) {
+//            Score timer = objective.getScore("timer");
+//            timer.customName(Component.text("⏱️ ").append(Component.text(activeTimer.getTime()).color(NamedTextColor.YELLOW)));
+//            timer.setScore(11);
+//
+//            Score blank2 = objective.getScore("   ");
+//            blank2.setScore(10);
+//        }
 
 
         Map<String, DataManager.TeamData> teamData = DataManager.teamData;

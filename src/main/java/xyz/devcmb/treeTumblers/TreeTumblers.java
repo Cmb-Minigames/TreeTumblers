@@ -5,6 +5,7 @@ import io.github.retrooper.packetevents.factory.spigot.SpigotPacketEventsBuilder
 import org.bukkit.plugin.java.JavaPlugin;
 import xyz.devcmb.treeTumblers.commands.RegisterCommands;
 import xyz.devcmb.treeTumblers.data.DataManager;
+import xyz.devcmb.treeTumblers.game.GameManager;
 import xyz.devcmb.treeTumblers.listeners.ListenerManager;
 import xyz.devcmb.treeTumblers.packets.PacketManager;
 import xyz.devcmb.treeTumblers.util.Database;
@@ -38,6 +39,8 @@ public final class TreeTumblers extends JavaPlugin {
         DataManager.registerAllTeams();
         ListenerManager.registerAllListeners();
         RegisterCommands.Register();
+
+        GameManager.registerAllMinigames();
     }
 
     @Override
