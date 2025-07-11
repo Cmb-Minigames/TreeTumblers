@@ -1,0 +1,8 @@
+name: TreeTumblers
+version: '0.1'
+main: xyz.devcmb.treeTumblers.TreeTumblers
+api-version: '1.21'
+prefix: Tree Tumblers
+authors: [ DevCmb ]
+description: The server. It lives.
+website: devcmb.xyz

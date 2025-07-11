@@ -1,0 +1,13 @@
+# Development minecraft server
+run
+
+# build files
+build
+
+# IDE specific
+.idea
+.kotlin
+
+# gradle shenanigans
+.gradle
+versionCounter.txt
