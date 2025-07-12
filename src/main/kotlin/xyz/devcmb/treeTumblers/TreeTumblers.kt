@@ -26,5 +26,8 @@ class TreeTumblers : JavaPlugin() {
         CommandManager.register()
     }
 
-    override fun onDisable() = Database.disconnect()
+    override fun onDisable() {
+        DataManager.beforeunload()
+        Database.disconnect()
+    }
 }

@@ -10,3 +10,6 @@ commands:
   playerdata:
     usage: /<command> <player>
     permission: treetumblers.organizer
+  teamdata:
+    usage: /<command> <name>
+    permission: treetumblers.organizer

@@ -1,12 +1,14 @@
 package xyz.devcmb.treeTumblers.data
 
 import org.bukkit.Bukkit
+import org.bukkit.OfflinePlayer
 import org.bukkit.entity.Player
 import org.bukkit.scheduler.BukkitRunnable
 import xyz.devcmb.treeTumblers.Constants
 import xyz.devcmb.treeTumblers.TreeTumblers
 import xyz.devcmb.treeTumblers.util.Database
 import java.sql.ResultSet
+import java.util.ArrayList
 
 object DataManager {
     val playerData: MutableMap<Player, PlayerData> = HashMap()
@@ -23,10 +25,28 @@ object DataManager {
     }
 
     fun startup() {
+        val teams: ResultSet? = Database.getTeamIDs()
+        if (teams == null) {
+            TreeTumblers.LOGGER.severe("❌ | Could not get all team data. Aborting load...")
+            return
+        }
+
+        while (teams.next()) {
+            val id: String? = teams.getString("id")
+            if (id == null) {
+                TreeTumblers.LOGGER.warning("⚠️ | Could not get id field of team data. Skipping...")
+                continue
+            }
+
+            val data = TeamData(id)
+            teamData[id] = data
+        }
+
         autosave = object : BukkitRunnable() {
             override fun run() {
                 TreeTumblers.LOGGER.info("ℹ️ | An autosave has started.")
                 playerData.forEach(Database::replicatePlayerData)
+                teamData.forEach(Database::replicateTeamData)
                 TreeTumblers.LOGGER.info("✅ | Autosave has finished!")
 
                 nextAutosaveTick = Bukkit.getServer().currentTick + Constants.AUTOMATIC_REPLICATION_INTERVAL
@@ -35,7 +55,10 @@ object DataManager {
 
         nextAutosaveTick = Bukkit.getServer().currentTick + Constants.AUTOMATIC_REPLICATION_INTERVAL
         autosave!!.runTaskTimer(TreeTumblers.plugin, Constants.AUTOMATIC_REPLICATION_INTERVAL, Constants.AUTOMATIC_REPLICATION_INTERVAL)
-        // TODO: Initialize team data
+    }
+
+    fun beforeunload() {
+        teamData.forEach(Database::replicateTeamData)
     }
 
     fun playerJoin(player: Player) {
@@ -77,8 +100,39 @@ object DataManager {
     }
 
     class TeamData {
-        constructor(team: String) {
+        val id: String
+        val displayName: String
+        val score: Int
+        val color: String
+        val icon: String
+        val players: MutableList<OfflinePlayer> = ArrayList()
 
+        constructor(team: String) {
+            id = team
+
+            val data: ResultSet? = Database.getTeamData(team)
+            if(data == null) {
+                displayName = "Unknown"
+                score = 0
+                color = "#ffffff"
+                icon = "\u0000"
+
+                TreeTumblers.LOGGER.warning("⚠️ | Could not get team data for $team, using defaults.")
+                return
+            }
+
+            displayName = data.getString("displayName")
+            score = data.getInt("score")
+            color = data.getString("color")
+            icon = data.getString("icon")
+
+            val members: MutableList<OfflinePlayer>? = Database.getTeamMembers(team)
+            if(members == null) {
+                TreeTumblers.LOGGER.warning("⚠️ | Could not get team members for $team, using an empty list.")
+                return
+            }
+
+            players.addAll(members)
         }
     }
 }
