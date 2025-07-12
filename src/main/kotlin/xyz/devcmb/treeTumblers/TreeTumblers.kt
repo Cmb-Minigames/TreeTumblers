@@ -2,6 +2,7 @@ package xyz.devcmb.treeTumblers
 import org.bukkit.plugin.Plugin
 import org.bukkit.plugin.java.JavaPlugin
 import xyz.devcmb.treeTumblers.listeners.ListenerManager
+import xyz.devcmb.treeTumblers.util.Database
 import java.util.logging.Logger
 
 class TreeTumblers : JavaPlugin() {
@@ -15,10 +16,11 @@ class TreeTumblers : JavaPlugin() {
 
     override fun onEnable() {
         _plugin = this
+        saveDefaultConfig()
 
-        ListenerManager.RegisterAllListeners();
+        Database.connect()
+        ListenerManager.RegisterAllListeners()
     }
 
-    override fun onDisable() {
-    }
+    override fun onDisable() = Database.disconnect()
 }
