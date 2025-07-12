@@ -1,5 +1,6 @@
 package xyz.devcmb.treeTumblers.util
 
+import org.bukkit.Bukkit
 import org.bukkit.OfflinePlayer
 import org.bukkit.configuration.file.FileConfiguration
 import org.bukkit.entity.Player
@@ -10,6 +11,7 @@ import java.sql.DriverManager
 import java.sql.PreparedStatement
 import java.sql.ResultSet
 import java.sql.SQLException
+import java.util.UUID
 
 object Database {
     private var connection: Connection? = null
@@ -122,6 +124,83 @@ object Database {
             statement.setString(1, data.team)
             statement.setInt(2, data.score)
             statement.setString(3, player.uniqueId.toString())
+
+            statement.executeUpdate()
+        } catch(e: SQLException) {
+            TreeTumblers.LOGGER.severe("❌ | Failed to create player db info: ${e.message}\n\n${e.stackTrace.joinToString("\n")}")
+        }
+    }
+
+    fun getTeamIDs(): ResultSet? {
+        if(connection == null) {
+            TreeTumblers.LOGGER.warning("⚠️ | Could not query database due to the connection not being established.")
+            return null
+        }
+
+        try {
+            val statement: PreparedStatement = connection!!.prepareStatement("SELECT id FROM teams")
+            val result: ResultSet = statement.executeQuery()
+
+            return result
+        } catch(e: SQLException) {
+            TreeTumblers.LOGGER.severe("❌ | Failed to read teams database: ${e.message}\n\n${e.stackTrace.joinToString("\n")}")
+            return null
+        }
+    }
+
+    fun getTeamData(id: String): ResultSet? {
+        if(connection == null) {
+            TreeTumblers.LOGGER.warning("⚠️ | Could not query database due to the connection not being established.")
+            return null
+        }
+
+        return try {
+            val statement: PreparedStatement = connection!!.prepareStatement("SELECT * FROM teams WHERE id = ?")
+            statement.setString(1, id)
+            val result: ResultSet = statement.executeQuery()
+
+            return if(result.next()) result else null
+        } catch(e: SQLException) {
+            TreeTumblers.LOGGER.severe("❌ | Failed to read teams database: ${e.message}\n\n${e.stackTrace.joinToString("\n")}")
+            null
+        }
+    }
+
+    fun getTeamMembers(id: String): MutableList<OfflinePlayer>? {
+        if(connection == null) {
+            TreeTumblers.LOGGER.warning("⚠️ | Could not query database due to the connection not being established.")
+            return null
+        }
+
+        return try {
+            val statement: PreparedStatement = connection!!.prepareStatement("SELECT uuid FROM players WHERE team = ?")
+            statement.setString(1, id)
+
+            val result: ResultSet = statement.executeQuery()
+            val players: MutableList<OfflinePlayer> = mutableListOf()
+
+            while(result.next()) {
+                val plr: OfflinePlayer = Bukkit.getOfflinePlayer(UUID.fromString(result.getString("uuid")))
+                players.add(plr)
+            }
+
+            players
+        } catch(e: SQLException) {
+            TreeTumblers.LOGGER.severe("❌ | Failed to read teams database: ${e.message}\n\n${e.stackTrace.joinToString("\n")}")
+            null
+        }
+    }
+
+    fun replicateTeamData(id: String, data: DataManager.TeamData) {
+        if(connection == null) {
+            TreeTumblers.LOGGER.warning("⚠️ | Could not query database due to the connection not being established.")
+            return
+        }
+
+        try {
+            val statement: PreparedStatement = connection!!.prepareStatement("UPDATE teams SET score = ? WHERE id = ?")
+            statement.setInt(1, data.score)
+            statement.setString(2, id)
 
             statement.executeUpdate()
         } catch(e: SQLException) {

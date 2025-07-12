@@ -4,10 +4,14 @@ import org.bukkit.command.CommandExecutor
 import org.bukkit.command.TabCompleter
 import xyz.devcmb.treeTumblers.TreeTumblers
 import xyz.devcmb.treeTumblers.commands.cmd.*
+import xyz.devcmb.treeTumblers.commands.completion.*
 
 object CommandManager {
     fun register() {
         registerSingleCommand("playerdata", PlayerDataCommand())
+        registerSingleCommand("teamdata", TeamDataCommand())
+
+        registerSingleTabCompletion("teamdata", TeamDataCommandCompletion())
     }
 
     /**
