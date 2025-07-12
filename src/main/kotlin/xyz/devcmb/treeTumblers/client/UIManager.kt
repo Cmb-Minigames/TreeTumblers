@@ -1,17 +1,17 @@
-package xyz.devcmb.treeTumblers.ui
+package xyz.devcmb.treeTumblers.client
 
 import org.bukkit.entity.Player
 
 object UIManager {
     var delegates: MutableMap<Player, PlayerUIDelegate> = HashMap()
 
-    fun PlayerAdded(player: Player) {
+    fun playerAdded(player: Player) {
         val delegate = PlayerUIDelegate(player)
         delegate.load()
         delegates[player] = delegate
     }
 
-    fun PlayerRemoved(player: Player) {
+    fun playerRemoved(player: Player) {
         val delegate: PlayerUIDelegate? = delegates[player]
         if(delegate == null) return
         delegate.unload()

@@ -1,4 +1,4 @@
-package xyz.devcmb.treeTumblers.ui.actionbar
+package xyz.devcmb.treeTumblers.client.actionbar
 
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor

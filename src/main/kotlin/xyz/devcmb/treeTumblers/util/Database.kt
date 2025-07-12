@@ -1,9 +1,14 @@
 package xyz.devcmb.treeTumblers.util
 
+import org.bukkit.OfflinePlayer
 import org.bukkit.configuration.file.FileConfiguration
+import org.bukkit.entity.Player
 import xyz.devcmb.treeTumblers.TreeTumblers
+import xyz.devcmb.treeTumblers.data.DataManager
 import java.sql.Connection
 import java.sql.DriverManager
+import java.sql.PreparedStatement
+import java.sql.ResultSet
 import java.sql.SQLException
 
 object Database {
@@ -26,7 +31,101 @@ object Database {
             connection = DriverManager.getConnection(url, username, password)
             TreeTumblers.LOGGER.info("✅ | Successfully connected to the MySQL database.")
         } catch (e: SQLException) {
-            TreeTumblers.LOGGER.severe("❌ | Failed to connect to the MySQL database: " + e.message)
+            TreeTumblers.LOGGER.severe("❌ | Failed to connect to the MySQL database: ${e.message}\n\n${e.stackTrace.joinToString("\n")}")
+        }
+    }
+
+    fun getPlayerDatabaseInformation(player: Player): ResultSet? {
+        if(connection == null) {
+            TreeTumblers.LOGGER.warning("⚠️ | Could not query database due to the connection not being established.")
+            return null
+        }
+
+        return try {
+            if(userExists(player) == false) {
+                createUserData(player, null)
+            }
+
+            val statement: PreparedStatement = connection!!.prepareStatement("SELECT * FROM players WHERE uuid = ?")
+            statement.setString(1, player.uniqueId.toString())
+
+            val result: ResultSet = statement.executeQuery()
+            return if (result.next()) result else null
+        } catch(e: SQLException) {
+            TreeTumblers.LOGGER.severe("❌ | Failed to get player db info: ${e.message}\n\n${e.stackTrace.joinToString("\n")}")
+            null
+        }
+    }
+
+    fun userExists(player: Player): Boolean? {
+        if(connection == null) {
+            TreeTumblers.LOGGER.warning("⚠️ | Could not query database due to the connection not being established.")
+            return null
+        }
+
+        return try {
+            val statement: PreparedStatement = connection!!.prepareStatement("SELECT COUNT(*) FROM players WHERE uuid = ?")
+            statement.setString(1, player.uniqueId.toString())
+            val result: ResultSet = statement.executeQuery()
+
+            result.next() && result.getInt(1) > 0
+        } catch (e: SQLException) {
+            TreeTumblers.LOGGER.severe("❌ | Failed to get player db info: ${e.message}\n\n${e.stackTrace.joinToString("\n")}")
+            null
+        }
+    }
+
+    fun createUserData(player: Player, team: String?) {
+        if(connection == null) {
+            TreeTumblers.LOGGER.warning("⚠️ | Could not query database due to the connection not being established.")
+            return
+        }
+
+        try {
+            val statement: PreparedStatement = connection!!.prepareStatement("INSERT INTO players (uuid, name, team, score) VALUES (?, ?, ?, 0)")
+            statement.setString(1, player.uniqueId.toString())
+            statement.setString(2, player.name)
+            statement.setString(3, team)
+
+            statement.executeUpdate()
+        } catch(e: SQLException) {
+            TreeTumblers.LOGGER.severe("❌ | Failed to create player db info: ${e.message}\n\n${e.stackTrace.joinToString("\n")}")
+        }
+    }
+
+    fun createUserData(player: OfflinePlayer, name: String, team: String?) {
+        if(connection == null) {
+            TreeTumblers.LOGGER.warning("⚠️ | Could not query database due to the connection not being established.")
+            return
+        }
+
+        try {
+            val statement: PreparedStatement = connection!!.prepareStatement("INSERT INTO players (uuid, name, team, score) VALUES (?, ?, ?, 0)")
+            statement.setString(1, player.uniqueId.toString())
+            statement.setString(2, name)
+            statement.setString(3, team)
+
+            statement.executeUpdate()
+        } catch(e: SQLException) {
+            TreeTumblers.LOGGER.severe("❌ | Failed to create player db info: ${e.message}\n\n${e.stackTrace.joinToString("\n")}")
+        }
+    }
+
+    fun replicatePlayerData(player: Player, data: DataManager.PlayerData) {
+        if(connection == null) {
+            TreeTumblers.LOGGER.warning("⚠️ | Could not query database due to the connection not being established.")
+            return
+        }
+
+        try {
+            val statement: PreparedStatement = connection!!.prepareStatement("UPDATE players SET team = ?, score = ? WHERE uuid = ?")
+            statement.setString(1, data.team)
+            statement.setInt(2, data.score)
+            statement.setString(3, player.uniqueId.toString())
+
+            statement.executeUpdate()
+        } catch(e: SQLException) {
+            TreeTumblers.LOGGER.severe("❌ | Failed to create player db info: ${e.message}\n\n${e.stackTrace.joinToString("\n")}")
         }
     }
 
@@ -39,7 +138,7 @@ object Database {
                 connection!!.close()
                 TreeTumblers.LOGGER.info("✅ | Disconnected from the MySQL database successfully.")
             } catch (e: SQLException) {
-                TreeTumblers.LOGGER.severe("❌ | Failed to disconnect from the MySQL database: " + e.message)
+                TreeTumblers.LOGGER.severe("❌ | Failed to disconnect from the MySQL database: ${e.message}\n\n${e.stackTrace.joinToString("\n")}")
             }
         }
     }

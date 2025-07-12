@@ -6,3 +6,7 @@ prefix: Tree Tumblers
 authors: [ DevCmb ]
 description: The server. It lives.
 website: devcmb.xyz
+commands:
+  playerdata:
+    usage: /<command> <player>
+    permission: treetumblers.organizer

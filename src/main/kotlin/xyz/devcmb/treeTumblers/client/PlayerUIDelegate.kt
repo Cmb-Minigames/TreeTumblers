@@ -1,21 +1,21 @@
-package xyz.devcmb.treeTumblers.ui
+package xyz.devcmb.treeTumblers.client
 
 import org.bukkit.entity.Player
 import org.bukkit.scheduler.BukkitRunnable
 import xyz.devcmb.treeTumblers.Constants
 import xyz.devcmb.treeTumblers.TreeTumblers
-import xyz.devcmb.treeTumblers.ui.actionbar.IActionBar
-import xyz.devcmb.treeTumblers.ui.actionbar.VersionDisplayBar
+import xyz.devcmb.treeTumblers.client.actionbar.IActionBar
+import xyz.devcmb.treeTumblers.client.actionbar.VersionDisplayBar
 
 class PlayerUIDelegate(val player: Player) {
     val actionbars: MutableMap<String, IActionBar> = HashMap()
     var actionbarRunnable: BukkitRunnable? = null
 
     fun load() {
-        LoadActionbars()
+        loadActionbars()
 
         if(Constants.DEV_MODE) {
-            ActivateActionbar("versionDisplay")
+            activateActionbar("versionDisplay")
         }
     }
 
@@ -25,7 +25,7 @@ class PlayerUIDelegate(val player: Player) {
         }
     }
 
-    private fun LoadActionbars() {
+    private fun loadActionbars() {
         loadActionbar(VersionDisplayBar(player))
     }
 
@@ -33,7 +33,7 @@ class PlayerUIDelegate(val player: Player) {
         actionbars[actionbar.name] = actionbar
     }
 
-    fun ActivateActionbar(name: String) {
+    fun activateActionbar(name: String) {
         if(actionbarRunnable !== null) {
             actionbarRunnable!!.cancel()
             actionbarRunnable = null
