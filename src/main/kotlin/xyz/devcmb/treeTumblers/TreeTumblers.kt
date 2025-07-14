@@ -1,5 +1,6 @@
 package xyz.devcmb.treeTumblers
 
+import com.noxcrew.interfaces.InterfacesListeners
 import org.bukkit.plugin.java.JavaPlugin
 import xyz.devcmb.treeTumblers.commands.CommandManager
 import xyz.devcmb.treeTumblers.data.DataManager
@@ -19,6 +20,8 @@ class TreeTumblers : JavaPlugin() {
     override fun onEnable() {
         _plugin = this
         saveDefaultConfig()
+
+        InterfacesListeners.install(this)
 
         Database.connect()
         DataManager.startup()

@@ -19,10 +19,14 @@ repositories {
     maven("https://oss.sonatype.org/content/groups/public/") {
         name = "sonatype"
     }
+    maven("https://maven.noxcrew.com/public") {
+        name = "noxcrew"
+    }
 }
 
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.21.6-R0.1-SNAPSHOT")
+    implementation("com.noxcrew.interfaces:interfaces:2.0.0")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 }
 
