@@ -49,7 +49,7 @@ CREATE TABLE `players` (
 CREATE TABLE `teams` (
   `id` varchar(255) NOT NULL COMMENT 'The camelcase id of the team for internal management and organizer assignments.',
   `displayName` varchar(255) NOT NULL,
-  `score` int(11) NOT NULL DEFAULT 0 COMMENT 'The total score for the entire team (added up individial)',
+  `score` int(11) NOT NULL DEFAULT 0 COMMENT 'The total score for the entire team (added up individual)',
   `color` varchar(255) NOT NULL COMMENT 'The hex color in string form',
   `icon` varchar(255) NOT NULL COMMENT 'The unicode character for the icon formatted like \\uE000'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='The database with all of the team data';
