@@ -8,7 +8,6 @@ import xyz.devcmb.treeTumblers.Constants
 import xyz.devcmb.treeTumblers.TreeTumblers
 import xyz.devcmb.treeTumblers.util.Database
 import java.sql.ResultSet
-import java.util.ArrayList
 
 object DataManager {
     val playerData: MutableMap<Player, PlayerData> = HashMap()
@@ -22,6 +21,20 @@ object DataManager {
         val minutes = secondsLeft / 60
         val seconds = secondsLeft % 60
         return "%02d:%02d".format(minutes, seconds)
+    }
+
+    fun getPlayerTeam(player: OfflinePlayer?): TeamData? {
+        for (entry in teamData.entries) {
+            val data = entry.value
+            val players: MutableList<OfflinePlayer> = data.players
+            for (plr in players) {
+                if (plr == player) {
+                    return data
+                }
+            }
+        }
+
+        return null
     }
 
     fun startup() {
@@ -103,6 +116,7 @@ object DataManager {
         val id: String
         val displayName: String
         val score: Int
+        val order: Int
         val color: String
         val icon: String
         val players: MutableList<OfflinePlayer> = ArrayList()
@@ -114,6 +128,7 @@ object DataManager {
             if(data == null) {
                 displayName = "Unknown"
                 score = 0
+                order = 999
                 color = "#ffffff"
                 icon = "\u0000"
 
@@ -125,6 +140,7 @@ object DataManager {
             score = data.getInt("score")
             color = data.getString("color")
             icon = data.getString("icon")
+            order = data.getInt("order")
 
             val members: MutableList<OfflinePlayer>? = Database.getTeamMembers(team)
             if(members == null) {

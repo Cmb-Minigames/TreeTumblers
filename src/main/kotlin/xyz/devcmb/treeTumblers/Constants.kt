@@ -1,7 +1,7 @@
 package xyz.devcmb.treeTumblers
 
 object Constants {
-    const val VERSION: String = "0.1-00006d"
+    const val VERSION: String = "0.1-000078"
     const val DEV_MODE: Boolean = true
     val AUTOMATIC_REPLICATION_INTERVAL: Long = Times.Minute.Ticks * 5L
 

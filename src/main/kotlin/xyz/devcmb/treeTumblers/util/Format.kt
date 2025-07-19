@@ -7,6 +7,7 @@ import net.kyori.adventure.text.format.TextColor
 import org.bukkit.OfflinePlayer
 import xyz.devcmb.treeTumblers.TreeTumblers
 import xyz.devcmb.treeTumblers.data.DataManager
+import xyz.devcmb.treeTumblers.data.DataManager.TeamData
 import java.util.Map
 
 object Format {
@@ -35,8 +36,25 @@ object Format {
     }
 
     fun formatPlayerName(player: OfflinePlayer): Component {
+        if (player.name == null) return Component.empty()
+        val formatted: Component
 
-        return Component.empty()
+        val teamData: TeamData? = DataManager.getPlayerTeam(player)
+        if (teamData == null) {
+            formatted = Component.empty().append(
+                Component.text(player.name!!).color(NamedTextColor.GRAY)
+            )
+
+            return formatted
+        }
+
+        val iconChar = teamData.icon.replace("\\u", "").toInt(16).toChar().toString()
+        formatted = Component.empty().append(
+            Component.empty().append(Component.text("$iconChar ").color(NamedTextColor.WHITE))
+                .font(Key.key("tumbling:icons"))
+        ).append(Component.text(player.name!!).color(TextColor.fromHexString(teamData.color)))
+
+        return formatted
     }
 
     fun formatTeamName(team: String?): Component {

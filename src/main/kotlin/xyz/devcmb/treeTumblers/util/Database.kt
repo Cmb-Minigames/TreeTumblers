@@ -6,12 +6,8 @@ import org.bukkit.configuration.file.FileConfiguration
 import org.bukkit.entity.Player
 import xyz.devcmb.treeTumblers.TreeTumblers
 import xyz.devcmb.treeTumblers.data.DataManager
-import java.sql.Connection
-import java.sql.DriverManager
-import java.sql.PreparedStatement
-import java.sql.ResultSet
-import java.sql.SQLException
-import java.util.UUID
+import java.sql.*
+import java.util.*
 
 object Database {
     private var connection: Connection? = null
@@ -205,6 +201,35 @@ object Database {
             statement.executeUpdate()
         } catch(e: SQLException) {
             TreeTumblers.LOGGER.severe("❌ | Failed to create player db info: ${e.message}\n\n${e.stackTrace.joinToString("\n")}")
+        }
+    }
+
+    val usernameCache: MutableMap<String?, String?> = HashMap<String?, String?>()
+    fun getDatabasePlayerName(UUID: String): String {
+        if (connection == null) {
+            TreeTumblers.LOGGER.severe("Database connection is not established.")
+            return "Unknown"
+        }
+
+        if (usernameCache[UUID] != null) {
+            return usernameCache[UUID] ?: "Unknown"
+        }
+
+        try {
+            val query = "SELECT name FROM players WHERE uuid = ?"
+            val statement = connection!!.prepareStatement(query)
+            statement.setString(1, UUID)
+            val resultSet = statement.executeQuery()
+            if (resultSet.next()) {
+                val result = resultSet.getString("name")
+                usernameCache.put(UUID, result)
+                return result
+            } else {
+                return "Unknown"
+            }
+        } catch (e: Exception) {
+            TreeTumblers.LOGGER.severe("Failed to get player name: " + e.message)
+            return "Unknown"
         }
     }
 
