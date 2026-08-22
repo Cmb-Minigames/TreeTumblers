@@ -11,9 +11,11 @@ The plugin adds a variety of games and an event system for playing these games i
 
 Not wanting to play with event mode? Just use the `/game start <name>` command to run a game sequence without it!
 
-## Downloading
+## Setup
 
 You need a lot of setup to use this plugin properly, so you can find an example server in the [releases tab!](https://github.com/CmbsMinecraftPlugins/TreeTumblers/releases) (all default config keys are for this)
+
+In order to run this plugin, **a mysql database instance with a password is required**. Once that is set up, enter the details into the plugin's `config.yml` file. All the tables will be created automatically. If you're using the template server, no other configuration is required.
 
 If you want to go through setting up the plugin yourself, The plugin can be found on many distribution websites, including the [github releases tab](https://github.com/CmbsMinecraftPlugins/TreeTumblers/releases). Each config key has a comment above it that shows what it changes, and for templates, refer to the template server.
 
